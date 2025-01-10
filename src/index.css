@@ -12,6 +12,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.game {
+    display: flex;
+}
+
 .container {
     text-align: center;
 }
@@ -56,4 +60,16 @@ body {
 }
 .new-game:hover {
     background-color: #2ecc71;
+}
+
+.moves {
+    color: white;
+}
+
+.move {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }

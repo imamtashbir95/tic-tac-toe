@@ -9,24 +9,13 @@ function Square({ value, onSquareClick }) {
     );
 }
 
-export default function Board() {
-    const [squares, setSquares] = useState(Array(9).fill(null));
-    const [xIsNext, setXIsNext] = useState(true);
-    // const [value, setValue] = useState("");
-
+function Board({ xIsNext, squares, onPlay, onNewGame }) {
     function handleClick(i) {
         if (squares[i] || calculateWinner(squares)) return;
         const newSquares = squares.slice();
         xIsNext ? (newSquares[i] = "🦍") : (newSquares[i] = "🦧");
         // newSquares[i] = xIsNext ? "X" : "O";
-        setSquares(newSquares);
-        setXIsNext(!xIsNext);
-    }
-
-    function handleNewGame() {
-        // Reset the game to its initial state
-        setSquares(Array(9).fill(null));
-        setXIsNext(true);
+        onPlay(newSquares);
     }
 
     const winner = calculateWinner(squares);
@@ -51,11 +40,57 @@ export default function Board() {
                         />
                     ))}
                 </div>
-                <button className="new-game" onClick={handleNewGame}>
+                <button className="new-game" onClick={onNewGame}>
                     New game
                 </button>
             </div>
         </>
+    );
+}
+
+export default function Game() {
+    const [xIsNext, setXIsNext] = useState(true);
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [currentMove, setCurrentMove] = useState(0);
+    const currentSquares = history[currentMove];
+
+    function jumpTo(nextMove) {
+        setCurrentMove(nextMove);
+        setXIsNext(nextMove % 2 === 0);
+    }
+
+    function handlePlay(newSquares) {
+        const newHistory = [...history.slice(0, currentMove + 1), newSquares];
+        setHistory(newHistory);
+        setCurrentMove(newHistory.length - 1);
+        setXIsNext(!xIsNext);
+    }
+
+    function handleNewGame() {
+        setHistory([Array(9).fill(null)]);
+        setCurrentMove(0);
+        setXIsNext(true);
+    }
+
+    const moves = history.map((squares, move) => {
+        let text = move > 0 ? `Go to move #${move}` : "Go to game start";
+
+        return (
+            <li key={move}>
+                <button className="move" onClick={() => jumpTo(move)}>{text}</button>
+            </li>
+        );
+    });
+
+    return (
+        <div className="game">
+            <div className="game-board">
+                <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} onNewGame={handleNewGame} />
+            </div>
+            <div className="game-info">
+                <ol className="moves">{moves}</ol>
+            </div>
+        </div>
     );
 }
 
