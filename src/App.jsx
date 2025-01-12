@@ -14,7 +14,7 @@ function Board({ xIsNext, squares, onPlay, onNewGame }) {
         if (squares[i] || calculateWinner(squares)) return;
         const newSquares = squares.slice();
         xIsNext ? (newSquares[i] = "🦍") : (newSquares[i] = "🦧");
-        // newSquares[i] = xIsNext ? "X" : "O";
+        // newSquares[i] = xIsNext ? "🦍" : "🦧";
         onPlay(newSquares);
     }
 
