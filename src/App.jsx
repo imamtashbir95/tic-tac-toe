@@ -17,7 +17,7 @@ export default function Board() {
         if (squares[i] || calculateWinner(squares)) return;
         const newSquares = [...squares]; // squares.slice();
         xIsNext ? (newSquares[i] = "🦍") : (newSquares[i] = "🦧");
-        // newSquares[i] = xIsNext ? "X" : "O";
+        // newSquares[i] = xIsNext ? "🦍" : "🦧";
         setSquares(newSquares);
         setXIsNext(!xIsNext);
     }
